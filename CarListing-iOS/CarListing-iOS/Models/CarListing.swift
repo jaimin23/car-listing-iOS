@@ -15,14 +15,16 @@ struct CarListing: Codable {
     let carImages: CarImages?
     let carPrice: Double?
     let carYear: Int?
+    let carMileage: Int?
     
     private enum CodingKeys: String, CodingKey {
         case id, dealer
         case carMake = "make"
         case carModel = "model"
         case carImages = "images"
-        case carPrice = "listPrice"
+        case carPrice = "currentPrice"
         case carYear = "year"
+        case carMileage = "mileage"
     }
 }
 
