@@ -7,101 +7,35 @@
 
 import UIKit
 
-class CarListingCell: UITableViewCell, UITextViewDelegate {
+class CarListingCell: UITableViewCell {
     
-    private lazy var carImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
-    private lazy var carInfoLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.italicSystemFont(ofSize: 14.0)
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    private lazy var priceLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    private lazy var carMileageLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    private lazy var cityStateLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    private lazy var dealerNumberLabel: UITextView = {
-        let label = UITextView()
-        label.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
-        label.delegate = self
-        label.isScrollEnabled = false
-        label.isEditable = false
-        label.dataDetectorTypes = .phoneNumber
-        return label
-    }()
-    
-    private lazy var hStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [priceLabel, carMileageLabel, cityStateLabel])
-        stackView.alignment = .center
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 12.0
-        stackView.axis = .horizontal
-        return stackView
-    }()
-    
-    private lazy var vStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [carImage, carInfoLabel, hStack, dealerNumberLabel])
-        stackView.alignment = .leading
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 8.0
-        stackView.axis = .vertical
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        commonInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func commonInit() {
-        addSubview(vStack)
-        vStack.topAnchor.constraint(equalTo: self.topAnchor, constant: 16.0).isActive = true
-        vStack.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8.0).isActive = true
-        vStack.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8.0).isActive = true
-        vStack.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -16.0).isActive = true
-    }
+    @IBOutlet weak var carInfoLabel: UILabel!
+    @IBOutlet weak var carImage: UIImageView!
+    @IBOutlet weak var carInfoHStack: UIStackView!
+    @IBOutlet weak var dealerPhoneNumber: UITextView!
     
     func configure(withCarListing carListing: CarListing) {
-        if let url = carListing.carImages?.medium?[0] {
-            setImage(withUrl: url)
+
+        var carYearMakeModel = ""
+        if let year = carListing.carYear {
+            carYearMakeModel += String(year)
         }
-        carInfoLabel.text = "\(carListing.carYear) \(carListing.carMake) \(carListing.carModel)"
-        priceLabel.text = "$\(carListing.carPrice)"
-        carMileageLabel.text = "\(carListing.carMileage) Mi"
-        cityStateLabel.text = "\(carListing.dealer?.city), \(carListing.dealer?.state)"
-        dealerNumberLabel.text = carListing.dealer?.phoneNumber
-    }
-    
-    private func setImage(withUrl url: String) {
-        if let url = URL(string: url) {
+        if let model = carListing.carModel {
+            carYearMakeModel += " \(model)"
+        }
+        if let make = carListing.carMake {
+            carYearMakeModel += " \(make)"
+        }
+        carInfoLabel.text = carYearMakeModel
+        setupCarInfoHStack(with: carListing.carPrice,
+                           mileage: carListing.carMileage,
+                           city: carListing.dealer?.city,
+                           state: carListing.dealer?.state)
+
+        dealerPhoneNumber.text = carListing.dealer?.phoneNumber
+
+        if let imgURL =  carListing.carImages?.medium?[0],
+           let url = URL(string: imgURL) {
             DispatchQueue.global().async {
                 if let data = try? Data(contentsOf: url) {
                     DispatchQueue.main.async {
@@ -111,5 +45,50 @@ class CarListingCell: UITableViewCell, UITextViewDelegate {
             }
         }
     }
+    
+    private func setupCarInfoHStack(with price: Double?, mileage: Int?, city: String?, state: String?) {
+        carInfoHStack.removeAllArrangedSubviews()
+        if let price = price {
+            carInfoHStack.addArrangedSubview(configureLabel(with: "$ \(String(price))"))
+        }
+        
+        if let mileage = mileage {
+            carInfoHStack.addArrangedSubview(configureLabel(with: "\(String(mileage)) Mi"))
+        }
+        
+        var cityState = ""
+        if let city = city {
+            cityState += city
+        }
+        
+        if let state = state {
+            cityState += ", \(state)"
+        }
+        carInfoHStack.addArrangedSubview(configureLabel(with: cityState))
+    }
+    
+    private func configureLabel(with text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
+        label.numberOfLines = 0
+        return label
+    }
+}
 
+extension UIStackView {
+    
+    func removeAllArrangedSubviews() {
+        
+        let removedSubviews = arrangedSubviews.reduce([]) { (allSubviews, subview) -> [UIView] in
+            self.removeArrangedSubview(subview)
+            return allSubviews + [subview]
+        }
+        
+        // Deactivate all constraints
+        NSLayoutConstraint.deactivate(removedSubviews.flatMap({ $0.constraints }))
+        
+        // Remove the views from self
+        removedSubviews.forEach({ $0.removeFromSuperview() })
+    }
 }

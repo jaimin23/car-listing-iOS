@@ -16,12 +16,15 @@ enum Result<T> {
 enum APIServiceError: Error {
     case apiError
     case dataDecodeError
-    case repoNotFound
 }
 
 class ServiceProvider<T: Service> {
     
     init() {}
+    
+    func load(service: T, completion: @escaping(Result<Data>) -> Void) {
+        makeAPICall(service.urlRequest, completion: completion)
+    }
     
     func load<U>(service: T, decodeType: U.Type, completion: @escaping (Result<U>) -> Void) where U: Decodable {
         makeAPICall(service.urlRequest) { result in
@@ -49,14 +52,6 @@ class ServiceProvider<T: Service> {
             if error != nil {
                 completion(.failure(.apiError))
                 return
-            }
-
-            //Check for response code specific error
-            if let response = response as? HTTPURLResponse {
-                if response.statusCode == 404 {
-                    completion(.failure(.repoNotFound))
-                    return
-                }
             }
             
             //Check for data

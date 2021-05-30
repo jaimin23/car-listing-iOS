@@ -9,13 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private var carListingTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.isHidden = true
-        tableView.register(CarListingCell.self, forCellReuseIdentifier: "carListingCell")
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
+    @IBOutlet weak var carListingTableView: UITableView!
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
@@ -36,7 +30,6 @@ class ViewController: UIViewController {
         carListingTableView.delegate = self
         activityIndicator.startAnimating()
         viewModel.viewReady { result, error in
-            self.activityIndicator.stopAnimating()
             if let error = error {
                 print(error)
                 //TODO: Handle error scenario
@@ -46,6 +39,7 @@ class ViewController: UIViewController {
                 if result.count > 0 {
                     self.carListings = result
                     DispatchQueue.main.async {
+                        self.activityIndicator.stopAnimating()
                         self.carListingTableView.reloadData()
                         self.carListingTableView.isHidden = false
                     }
@@ -81,5 +75,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
 }
 

@@ -7,6 +7,11 @@
 
 import Foundation
 
+
+struct CarListingResult: Codable {
+    let listings: [CarListing]?
+}
+
 struct CarListing: Codable {
     let id: String?
     let dealer: Dealer?
