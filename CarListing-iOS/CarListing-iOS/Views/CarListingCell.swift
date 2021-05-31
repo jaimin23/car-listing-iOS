@@ -12,7 +12,8 @@ class CarListingCell: UITableViewCell {
     @IBOutlet weak var carInfoLabel: UILabel!
     @IBOutlet weak var carImage: UIImageView!
     @IBOutlet weak var carInfoHStack: UIStackView!
-    @IBOutlet weak var dealerPhoneNumber: UITextView!
+    
+    private var phoneNumber = ""
     
     func configure(withCarListing carListing: CarListing) {
 
@@ -31,8 +32,10 @@ class CarListingCell: UITableViewCell {
                            mileage: carListing.carMileage,
                            city: carListing.dealer?.city,
                            state: carListing.dealer?.state)
-
-        dealerPhoneNumber.text = carListing.dealer?.phoneNumber
+        
+        if let phoneNumber = carListing.dealer?.phoneNumber {
+            self.phoneNumber = "tel://\(phoneNumber)"
+        }
 
         if let imgURL =  carListing.carImages?.medium?[0],
            let url = URL(string: imgURL) {
@@ -67,6 +70,11 @@ class CarListingCell: UITableViewCell {
         carInfoHStack.addArrangedSubview(configureLabel(with: cityState))
     }
     
+    @IBAction func callDealerTapped(_ sender: Any) {
+        if let url = URL(string: phoneNumber) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
     private func configureLabel(with text: String) -> UILabel {
         let label = UILabel()
         label.text = text
@@ -76,6 +84,9 @@ class CarListingCell: UITableViewCell {
     }
 }
 
+
+
+//Source: https://gist.github.com/Deub27/5eadbf1b77ce28abd9b630eadb95c1e2
 extension UIStackView {
     
     func removeAllArrangedSubviews() {

@@ -22,10 +22,10 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="carListingCell" id="E8Y-Es-cLF" customClass="CarListingCell" customModule="CarListing_iOS" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="24.5" width="414" height="340.5"/>
+                                        <rect key="frame" x="0.0" y="24.5" width="414" height="353.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="E8Y-Es-cLF" id="IcP-A5-TSI">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="340.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="353.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XSQ-Eb-ktB">
@@ -40,31 +40,36 @@
                                                         <constraint firstAttribute="height" constant="250" id="2Ao-Vz-XhJ"/>
                                                     </constraints>
                                                 </imageView>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="1Ji-ME-0qS">
-                                                    <rect key="frame" x="16" y="299.5" width="382" height="33"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                    <color key="textColor" systemColor="labelColor"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                    <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES" shipmentTrackingNumber="YES" flightNumber="YES" lookupSuggestion="YES"/>
-                                                </textView>
                                                 <stackView opaque="NO" contentMode="center" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="nKa-LF-tId">
                                                     <rect key="frame" x="16" y="291" width="382" height="0.5"/>
                                                 </stackView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9hm-Q7-saz">
+                                                    <rect key="frame" x="16" y="299.5" width="382" height="43"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="43" id="o1A-0x-6MT"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Call Dealer">
+                                                        <color key="titleColor" systemColor="systemBackgroundColor"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="callDealerTapped:" destination="E8Y-Es-cLF" eventType="touchUpInside" id="k4f-1q-FwT"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="XSQ-Eb-ktB" secondAttribute="trailing" constant="16" id="0zu-82-Y1Z"/>
                                                 <constraint firstItem="s2n-fs-Qhl" firstAttribute="leading" secondItem="IcP-A5-TSI" secondAttribute="leading" constant="16" id="1t6-o1-XqJ"/>
                                                 <constraint firstAttribute="trailing" secondItem="s2n-fs-Qhl" secondAttribute="trailing" constant="16" id="2ch-MZ-eKK"/>
-                                                <constraint firstItem="1Ji-ME-0qS" firstAttribute="leading" secondItem="IcP-A5-TSI" secondAttribute="leading" constant="16" id="EAo-O3-z4z"/>
-                                                <constraint firstAttribute="bottom" secondItem="1Ji-ME-0qS" secondAttribute="bottom" constant="8" id="FCM-rv-RvR"/>
+                                                <constraint firstItem="9hm-Q7-saz" firstAttribute="leading" secondItem="IcP-A5-TSI" secondAttribute="leading" constant="16" id="30C-f8-xNv"/>
+                                                <constraint firstItem="9hm-Q7-saz" firstAttribute="bottom" secondItem="IcP-A5-TSI" secondAttribute="bottomMargin" id="4BB-fe-V0h"/>
                                                 <constraint firstItem="XSQ-Eb-ktB" firstAttribute="leading" secondItem="IcP-A5-TSI" secondAttribute="leading" constant="16" id="Gn2-M4-0fM"/>
                                                 <constraint firstItem="nKa-LF-tId" firstAttribute="top" secondItem="s2n-fs-Qhl" secondAttribute="bottom" constant="8" id="HkK-5P-oGY"/>
                                                 <constraint firstItem="XSQ-Eb-ktB" firstAttribute="top" secondItem="IcP-A5-TSI" secondAttribute="top" constant="8" id="VhU-ej-sCg"/>
                                                 <constraint firstItem="s2n-fs-Qhl" firstAttribute="top" secondItem="XSQ-Eb-ktB" secondAttribute="bottom" constant="8" id="YLF-Go-Bpf"/>
-                                                <constraint firstAttribute="trailing" secondItem="1Ji-ME-0qS" secondAttribute="trailing" constant="16" id="fu6-IG-XlJ"/>
+                                                <constraint firstItem="9hm-Q7-saz" firstAttribute="top" secondItem="nKa-LF-tId" secondAttribute="bottom" constant="8" id="b5z-bG-RP0"/>
+                                                <constraint firstAttribute="trailing" secondItem="9hm-Q7-saz" secondAttribute="trailing" constant="16" id="bFt-o8-Htk"/>
                                                 <constraint firstAttribute="trailing" secondItem="nKa-LF-tId" secondAttribute="trailing" constant="16" id="rfi-L8-M1a"/>
-                                                <constraint firstItem="1Ji-ME-0qS" firstAttribute="top" secondItem="nKa-LF-tId" secondAttribute="bottom" constant="8" id="uRP-Vr-Sev"/>
                                                 <constraint firstItem="nKa-LF-tId" firstAttribute="leading" secondItem="IcP-A5-TSI" secondAttribute="leading" constant="16" id="utJ-E4-l4f"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -72,7 +77,6 @@
                                             <outlet property="carImage" destination="s2n-fs-Qhl" id="fIA-KH-jYZ"/>
                                             <outlet property="carInfoHStack" destination="nKa-LF-tId" id="2E0-Uf-cY8"/>
                                             <outlet property="carInfoLabel" destination="XSQ-Eb-ktB" id="wRd-Hb-qC1"/>
-                                            <outlet property="dealerPhoneNumber" destination="1Ji-ME-0qS" id="D8h-TZ-zW0"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -117,9 +121,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
